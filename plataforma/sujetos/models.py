@@ -36,9 +36,11 @@ class Persona(models.Model):
                             choices=SEXO_CHOICES,
                             default=FEMENINO)
     
+    CFS = models.ForeignKey('cfs', null=True, blank=True)
+
     estado = models.ForeignKey('Estado', null=True, blank=True)
     municipio = models.ForeignKey('Municipio', null=True, blank=True)
-
+    parroquia = models.CharField(max_length=60, blank=False)
     numero_telefono = models.CharField(max_length=60, blank=False)
     correo_electronico = models.EmailField(null=True, blank=True)
     direccion = models.CharField(max_length=60)
@@ -75,6 +77,7 @@ class PersonaAdmin(admin.ModelAdmin):
 class Proyecto(models.Model):
     numero_proyecto = models.IntegerField()
     nombre = models.CharField(max_length = 10)
+    CFS = models.ForeignKey('cfs', null=True, blank=True)
     estado = models.ForeignKey('Estado', null=True, blank=True)
     municipio = models.ForeignKey('Municipio', null=True, blank=True)
     parroquia = models.CharField(max_length = 30, null=False)
@@ -122,8 +125,21 @@ class Municipio(models.Model):
     
 class MunicipioAdmin(admin.ModelAdmin):
     list_display = ["nombre_municipio"]
+    
+    
+class cfs(models.Model):
+    nombre_cfs = models.CharField(max_length = 60)
+    
+    def __unicode__(self):
+        return self.nombre_cfs
+        
+
+    
+class cfsAdmin(admin.ModelAdmin):
+    list_display =["nombre_cfs"]
 
 admin.site.register(Persona, PersonaAdmin)
 admin.site.register(Proyecto)
 admin.site.register(Estado, EstadoAdmin)
 admin.site.register(Municipio, MunicipioAdmin)
+admin.site.register(cfs, cfsAdmin)
